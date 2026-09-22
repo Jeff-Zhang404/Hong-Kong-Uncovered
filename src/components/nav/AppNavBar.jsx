@@ -14,7 +14,7 @@ const LINK_STYLE = {
     margin: "0 1rem",
 };
 
-export default function AppNavBar(props) {
+export default function AppNavBar() {
     const location = useLocation();
 
     const makeStyle = (to) => {
@@ -34,6 +34,11 @@ export default function AppNavBar(props) {
     return (
         <Navbar expand="lg" style={NAVBAR_STYLE} variant="light" sticky="top">
             <Container fluid className="justify-content-between">
+                <Navbar.Brand as={Link} to="/" style={{ color: "#c60c30", fontWeight: 700 }}>
+                    Hong Kong Uncovered
+                </Navbar.Brand>
+                <Navbar.Toggle aria-controls="main-navigation" />
+                <Navbar.Collapse id="main-navigation" className="justify-content-between">
                 <Nav className="align-items-center">
                     <Nav.Link as={Link} to="/" style={makeStyle("/")}>
                         Home Page
@@ -54,8 +59,7 @@ export default function AppNavBar(props) {
                         Bookmark
                     </Nav.Link>
                 </Nav>
-
-
+                </Navbar.Collapse>
             </Container>
         </Navbar>
     );

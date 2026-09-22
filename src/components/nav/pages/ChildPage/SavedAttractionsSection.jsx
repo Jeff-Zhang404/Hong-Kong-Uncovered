@@ -98,7 +98,7 @@ export default function SavedAttractionsSection() {
             {savedAttractions.length === 0 ? (
                 <Card style={{ padding: "1rem", borderRadius: 8 }}>
                     <Card.Body>
-                        <p>There is not saved attractions!</p>
+                        <p style={{ margin: 0 }}>There are no saved attractions matching the filters.</p>
                     </Card.Body>
                 </Card>
             ) : (

@@ -46,7 +46,7 @@ export default function HomePage() {
   if (!slides.length) {
     return (
       <Alert variant="warning" className="my-5">
-        There is not content to display
+        There is no content to display.
       </Alert>
     );
   }

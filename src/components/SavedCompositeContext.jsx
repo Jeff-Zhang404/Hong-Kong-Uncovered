@@ -30,7 +30,9 @@ export function SavedProvider({ children }) {
   const persist = (newSet) => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify([...newSet]));
-    } catch {}
+    } catch (error) {
+      console.error("Unable to save bookmarks", error);
+    }
   };
 
    const compositeKey = (type, id) => `${type}:${id}`;

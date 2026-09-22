@@ -3,8 +3,7 @@ import { Card, Button } from "react-bootstrap";
 import { useSavedComposite } from "../../../SavedCompositeContext"
 
 export default function SavedAttractionCard({ attraction }) {
-    const { isSaved, toggle } = useSavedComposite();
-    const saved = isSaved("tourist", attraction.id);
+    const { toggle } = useSavedComposite();
 
     const handleUnsave = () => {
         toggle("tourist", attraction.id);
