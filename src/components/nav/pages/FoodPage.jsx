@@ -3,6 +3,7 @@ import { Container, Row, Col, Form, Button, Card } from "react-bootstrap";
 import FoodItem from "./ChildPage/FoodItem"
 import { useSavedComposite } from "../../SavedCompositeContext"
 import { useData } from '../../DataContext';
+import DataLoadError from "../../DataLoadError";
 
 
 const COLORS = {
@@ -25,7 +26,7 @@ function parseEstimatedCost(raw) {
 
 
 export default function FoodPage() {
-  const { foods, loading } = useData();
+  const { foods, loading, error, retry } = useData();
   const { isSaved, toggle } = useSavedComposite();
 
   //filter: implement 'refine data' pattern
@@ -80,6 +81,7 @@ export default function FoodPage() {
 
 
   if (loading) return <div>Loading...</div>;
+  if (error) return <DataLoadError error={error} onRetry={retry} title="We couldn't load the food guide." />;
 
 
   return <div style={{ backgroundColor: COLORS.background, minHeight: '100vh', padding: '2rem' }}>

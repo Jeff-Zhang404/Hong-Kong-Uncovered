@@ -1,31 +1,43 @@
 // src/components/nav/pages/HomePage.jsx
 import React, { useState, useEffect } from "react";
 import { Carousel, Spinner, Alert } from "react-bootstrap";
+import DataLoadError from "../../DataLoadError";
 
 export default function HomePage() {
   const [slides, setSlides]     = useState([]);
   const [loading, setLoading]   = useState(true);
   const [error, setError]       = useState(null);
+  const [requestKey, setRequestKey] = useState(0);
 
   useEffect(() => {
+    const controller = new AbortController();
     const base = import.meta.env.BASE_URL;
+    setLoading(true);
+    setError(null);
 
-    fetch(`${base}data/HomePageData.json`)
+    fetch(`${base}data/HomePageData.json`, { signal: controller.signal })
       .then((res) => {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         return res.json();
       })
       .then((data) => {
+        if (!Array.isArray(data)) {
+          throw new Error("Homepage data has an invalid format.");
+        }
         setSlides(data);
       })
       .catch((err) => {
-        console.error("Failed to load carousel data:", err);
-        setError(err);
+        if (err.name !== "AbortError") {
+          console.error("Failed to load carousel data:", err);
+          setError(err);
+        }
       })
       .finally(() => {
-        setLoading(false);
+        if (!controller.signal.aborted) setLoading(false);
       });
-  }, []);
+
+    return () => controller.abort();
+  }, [requestKey]);
 
   if (loading) {
     return (
@@ -37,9 +49,11 @@ export default function HomePage() {
 
   if (error) {
     return (
-      <Alert variant="danger" className="my-5">
-        Cannot load: {error.message}
-      </Alert>
+      <DataLoadError
+        error={error}
+        onRetry={() => setRequestKey((current) => current + 1)}
+        title="We couldn't load the homepage."
+      />
     );
   }
 

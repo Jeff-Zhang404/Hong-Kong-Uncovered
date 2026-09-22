@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import SavedAttractionsSection from "./ChildPage/SavedAttractionsSection";
 import SavedFoodSection from "./ChildPage/SavedFoodSection"
-import { Container, Nav } from "react-bootstrap"
+import { Container } from "react-bootstrap"
+import { useData } from "../../DataContext";
+import DataLoadError from "../../DataLoadError";
 
 const COLORS = {
   primary: '#c60c30',    // HK flag red
@@ -21,6 +23,7 @@ const LINK_STYLE = {
 
 export default function BookmarkPage() {
   const [activeTab, setActiveTab] = useState("attractions");
+  const { loading, error, retry } = useData();
 
   const makeTabStyle = (key) => {
     const base = { ...LINK_STYLE };
@@ -34,6 +37,9 @@ export default function BookmarkPage() {
     return base;
   };
   
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <DataLoadError error={error} onRetry={retry} title="We couldn't load your bookmarked content." />;
 
   return (
     <div style={{ backgroundColor: COLORS.background, minHeight: '100vh', padding: '2rem' }}>
